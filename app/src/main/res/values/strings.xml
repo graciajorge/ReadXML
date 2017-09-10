@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Read XML</string>
+    <string name="action_bttn">Click to try</string>
+    <string name="url_text">URL</string>
+    <string name="url_bttn_text">Get XML</string>
+    <string name="basic_auth">Basic Auth</string>
+    <string name="signin">Sign-in</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="save">Save</string>
+    <string name="save_as">Save As</string>
+    <string name="save_xml">Save as XML</string>
+    <string name="to_csv">Convert to CSV</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+
+</resources>
