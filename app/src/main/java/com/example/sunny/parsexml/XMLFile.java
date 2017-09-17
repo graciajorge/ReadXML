@@ -7,30 +7,20 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 /**
+ * Class extends CustomFile to save a XML
+ * file
+ *
  * Created by Sunny on 6/18/2017.
  */
-
 public class XMLFile extends CustomFile{
 
-    public XMLFile(){
-
-    }
-
-    public void writeFile(Editable text) throws java.io.IOException{
-        FileOutputStream outStream;
-
-        //outStream= new FileOutputStream(new File(getExternalFilesDir(null),"temp_xml.xml"));
-        //TODO check that we have enough space to read and write
-
-        outStream= new FileOutputStream(new File(super.getIntDir(),super.getFilename()),false);//append is false
-
-        for(int i=0;i<text.length();i++){
-            outStream.write(text.charAt(i));
-        }
-        outStream.close();
-
-    }
-
+    /**
+     * write file using a FileInputStream, and check if the filename
+     * already exists in our external application directory.
+     *
+     * @param text as FileInputStream
+     * @throws java.io.IOException
+     */
     public void writeFile(FileInputStream text) throws java.io.IOException{
         FileOutputStream outStream;
         int fByte;

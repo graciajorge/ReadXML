@@ -22,19 +22,26 @@ import java.io.File;
 import java.io.FileInputStream;
 
 /**
+ * Display a text box for user to write
+ * filename to save and save the file as
+ * directed
+ *
  * Created by Sunny on 6/12/2017.
  */
-
 public class SaveFileDialog extends DialogFragment implements AlertDataPass{
 
     private FileDataPass fileData;
     private CustomFile cFile;
     private String msg;
 
+
+    /*Constructor to initialize customeFile*/
     public SaveFileDialog(){
         cFile=new XMLFile();
     }
 
+
+    /*Display an alert if an error occurs while trying to save*/
     private void createAlertDialog(String msg){
         this.msg="it was false";//message to pass to alert
 
@@ -48,7 +55,9 @@ public class SaveFileDialog extends DialogFragment implements AlertDataPass{
 
     }
 
-    private void methodSaveXML(String filename){
+
+    /*Save file as xml file*/
+    private void saveXML(String filename){
         XMLFile save=new XMLFile();
         cFile.setFilename(filename);//we assume file directories are set
 
@@ -68,7 +77,10 @@ public class SaveFileDialog extends DialogFragment implements AlertDataPass{
 
 
     }
-    private void methodSaveCSV(String filename){
+
+
+    /*Save file as CSV file*/
+    private void saveCSV(String filename){
         CSVFile csv=new CSVFile();
         cFile.setFilename(filename);//we assume file directories are set
         ArrayAdapter eList=fileData.getViewList();
@@ -89,6 +101,8 @@ public class SaveFileDialog extends DialogFragment implements AlertDataPass{
         }
     }
 
+
+    /*Obtain file data from intent to save*/
     public void onAttach(Context temp){
         super.onAttach(temp);
         Activity parent= (Activity)temp;
@@ -112,10 +126,10 @@ public class SaveFileDialog extends DialogFragment implements AlertDataPass{
                         cFile=fileData.getTempFile();
                         switch(cFile.getfType()){
                             case XML:
-                                methodSaveXML(filename.getText().toString());
+                                saveXML(filename.getText().toString());
                                 break;
                             case CSV:
-                                methodSaveCSV(filename.getText().toString());
+                                saveCSV(filename.getText().toString());
                                 break;
                             default:
                                 Toast.makeText(getActivity(),"File type is not supported!",Toast.LENGTH_SHORT).show();
@@ -154,13 +168,7 @@ public class SaveFileDialog extends DialogFragment implements AlertDataPass{
 
     /*Overridden messages from interfaces*/
 
-    /**
-     * Override message return for 'AlertDataPass'.
-     * String is used to set message in
-     * dialog fragment.
-     *
-     * @return msg string message
-     */
+    /*Override message return for 'AlertDataPass'. String is used to set message in dialog fragment*/
     @Override
     public String getMessage() {
         return this.msg;

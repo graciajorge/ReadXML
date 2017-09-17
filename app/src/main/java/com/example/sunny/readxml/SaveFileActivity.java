@@ -17,6 +17,12 @@ import com.example.sunny.parsexml.FileType;
 import java.util.LinkedList;
 
 /**
+ * Implements AlertDataPass to pass alert message to dialog, and
+ * FileDataPass to pass file to SaveFileDialog.
+ * Convert and save xml file as a CSV file from
+ * the elements the user chooses through this activity
+ * Note: element names are case-sensitive
+ *
  * Created by Sunny on 6/22/2017.
  */
 
@@ -27,10 +33,24 @@ public class SaveFileActivity extends Activity implements AlertDataPass,FileData
     private CustomFile file;
 
 
+    /*Implement getMessage from interface AlertDataPass*/
     public String getMessage() {
         return msg;
     }
 
+
+    @Override
+    /*Implemented methods from FileDataPass*/
+    public CustomFile getTempFile() {
+        return file;
+    }
+
+
+    @Override
+    public ArrayAdapter getViewList() {return nodeAdapt;}
+
+
+    /*Check if the element the user inserts is already in the list*/
     public boolean inList(String element){
 
         for(int i=0;i<nodeAdapt.getCount();i++){
@@ -42,6 +62,7 @@ public class SaveFileActivity extends Activity implements AlertDataPass,FileData
     }
 
 
+    /*User clicks add, in order push element in list*/
     public void onAdd(View v){
         DialogFragment alert= new NotifyDialog();
 
@@ -59,6 +80,8 @@ public class SaveFileActivity extends Activity implements AlertDataPass,FileData
     }
 
 
+    //Todo implement a more intuitive way to edit list
+    /*User clicks an item on the ListView, then delete that item*/
     public void onClickList(View v){
         TextView element=(TextView)v;
         String name=element.getText().toString();
@@ -68,6 +91,8 @@ public class SaveFileActivity extends Activity implements AlertDataPass,FileData
         }//if not null remove element name from list
     }
 
+
+    /*User clicks save, therefore display saveFileDialog*/
     public void onSaveCSV(View v){
         file=new CSVFile();
 
@@ -91,12 +116,4 @@ public class SaveFileActivity extends Activity implements AlertDataPass,FileData
 
     }
 
-    /*Overridden Interface function references */
-    @Override
-    public CustomFile getTempFile() {
-        return file;
-    }
-
-    @Override
-    public ArrayAdapter getViewList() {return nodeAdapt;}
 }

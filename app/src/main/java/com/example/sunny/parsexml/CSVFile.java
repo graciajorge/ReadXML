@@ -14,21 +14,38 @@ import java.io.IOException;
  *
  * Created by Sunny on 6/24/2017.
  */
-
 public class CSVFile extends CustomFile{
     private ArrayAdapter nodeList;
     private XMLDoc xmlDoc;
     private String varRow;
 
 
+    /**
+     * Constructor to initialize an xmlDoc variable
+     * to hold existing xml document to be converted
+     *
+     */
     public CSVFile(){
         xmlDoc=new XMLDoc();
     }
 
+    /**
+     * set nodeList which consists of element names which belong to
+     * xml file.
+     *
+     * @param arrList as ArrayAdapter
+     */
     public void setNodeList(ArrayAdapter arrList){
         nodeList=arrList;
     }
 
+
+    /**
+     * Create elementList from element names, to be used
+     * when creating our CSV file.
+     *
+     * @return eList as ElementList
+     */
     private ElementList createList(){
         ElementList eList=new ElementList();
         NodeList valueList;
@@ -36,25 +53,29 @@ public class CSVFile extends CustomFile{
 
 
         for(int i=0;i<nodeList.getCount();i++){
-            name=nodeList.getItem(i).toString();
-            valueList=xmlDoc.getNodeListByName(name);
+            name=nodeList.getItem(i).toString(); //element name
+            valueList=xmlDoc.getNodeListByName(name); //get list from element name
             if(valueList.getLength()!=0) {
                 if(i==0)
                     varRow=name;
                 else
                     varRow+=","+name;
-                eList.insertEnd(name, valueList);
+                eList.insertEnd(name, valueList);//push list and element name to end
             }
         }
 
         return eList;
     }
 
-    @Override
-    public void writeFile(Editable text) throws IOException {
 
-    }
-
+    /**
+     * pass file with xml data to be
+     * converted to csv using the element list
+     * created from the elements specified by the user.
+     *
+     * @param text as File
+     * @throws Exception when error
+     */
     public void writeFile(File text) throws Exception{
         FileOutputStream outStream;
         ElementList eList;
@@ -73,13 +94,13 @@ public class CSVFile extends CustomFile{
                         outStream.write((varRow).getBytes());//write column names
 
                         for(int j=0;j<eList.head.getList().getLength();j++){
+
                             for(int k=0;k<eList.getCount();k++){
                                 value=eList.valueByNameIndex(nodeList.getItem(k).toString(),j);
 
                                 if(value.contains(",")){
                                     value="\""+value+"\"";
                                 }//if value has commas add double-qoutes
-
                                 if(k==0)
                                     outStream.write(("\n"+value).getBytes());
                                 else{

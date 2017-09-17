@@ -41,13 +41,15 @@
                 android:layout_width="88dp"
                 android:layout_height="wrap_content"
                 android:text="@string/url_bttn_text" />
+            <!--Future update add basic authentication option-->
             <Button
                 android:id="@+id/set_credentials"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/url_get_button"
                 android:text="@string/basic_auth"
-                android:onClick="onClick"/>
+                android:onClick="onAuth"
+                android:enabled="false"/>
             <Button
                 android:id="@+id/save_as"
                 android:layout_width="wrap_content"

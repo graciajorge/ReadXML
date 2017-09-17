@@ -13,6 +13,9 @@ import android.widget.EditText;
 
 
 /**
+ * Display signon dialog so user can set his username
+ * and password for basic authorization header.
+ *
  * Created by Sunny on 6/4/2017.
  */
 
@@ -20,6 +23,8 @@ public class SignOnDialog extends DialogFragment{
 
     private SignOnDataPass passSignOn;
 
+
+    /*obtain parameter from the activity*/
     public void onAttach(Context temp){
         super.onAttach(temp);
         Activity act= (Activity)temp;
@@ -27,14 +32,20 @@ public class SignOnDialog extends DialogFragment{
 
     }
 
+
+    /*Pass password to the activity*/
     public void passPswd(String pswd){
         passSignOn.passPassword(pswd);
     }
 
+
+    /*pass username to the activity*/
     public void passUser(String user){
         passSignOn.passUsername(user);
     }
 
+
+    /*get password and username if it is already set*/
     public void defaultSignOn(View v){
 
         EditText pswd=(EditText)v.findViewById(R.id.password);
@@ -45,6 +56,8 @@ public class SignOnDialog extends DialogFragment{
 
     }
 
+
+    /*once user clicks ok send back the username and password*/
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View signOn;
 

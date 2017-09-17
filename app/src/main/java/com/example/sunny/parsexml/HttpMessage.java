@@ -5,36 +5,24 @@
  */
 package com.example.sunny.parsexml;
 
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Handler;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.*;
 import java.net.*;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.HandlerBase;
-import org.xml.sax.InputSource;
-import org.xml.sax.helpers.DefaultHandler;
-
-import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
+ * class to handle android http xml messages. Implements
+ * getRequest. Run request on a separate thread.
+ *
+ * Note: Android won't allow web usage on main thread!
  *
  * @author Sunny
  */
-public class HttpMessage extends Thread implements GetRequest{
+public class HttpMessage implements GetRequest{
 
     private URL url;
     private static StringBuilder errMsg;
@@ -61,52 +49,120 @@ public class HttpMessage extends Thread implements GetRequest{
     }
 
 
+    /**
+     * set url for our web service call
+     *
+     * @param urlText as String
+     * @throws MalformedURLException when bad url
+     */
     public void setUrl(String urlText) throws MalformedURLException{
         url=new URL(urlText);
     }
 
 
+    /**
+     * get web service url
+     *
+     * @return url as URL
+     */
     public URL getUrl(){
         return url;
     }
 
 
+    /**
+     * set username for basic authentication header
+     *
+     * @param username as string
+     */
     public void setUsername(String username){
         this.username=username;
     }
 
 
+    /**
+     * get username as string
+     *
+     * @return username as String
+     */
     public String getUsername(){
-        return this.username;
+        return username;
     }
 
 
+    /**
+     * set password for basic authentication header
+     *
+     * @param pswd as String
+     */
     public void setPswd(String pswd){
         this.pswd=pswd;
     }
 
 
-    public String getPswd(){
-        return this.pswd;
-    }
+    /**
+     * get password as string
+     *
+     * @return pswd as String
+     */
+    public String getPswd(){ return pswd; }
 
 
+    /**
+     * override the status code for message return
+     *
+     * @param statusCode as integer
+     */
     public void setStatusCode(int statusCode){
         this.statusCode=statusCode;
     }
 
 
+    /**
+     * get status code from http response
+     *
+     * @return statusCode as integer
+     */
     public int getStatusCode(){
-        return this.statusCode;
+        return statusCode;
     }
 
 
+    /**
+     * get error message if any
+     *
+     * @return errMsg as StringBuilder
+     */
     public StringBuilder getErrMsg(){return errMsg;}
 
 
+    /**
+     * get content string from message returned
+     *
+     * @return strList as List<String>
+     */
+    public List <String> getList(){
+        return strList;
+    }
 
 
-    public void run(){
+    /**
+     * toString overridden from interface getrequest to output
+     * web service response as string.
+     *
+     * @return string content
+     */
+    public String toString(){
+        return strList.toString();
+    }
+
+
+    /**
+     * call service request
+     * and read response or set err message.
+     *
+     */
+    public void sendRequest(){
         String type="";
         String line="";
         FileOutputStream file;
@@ -114,7 +170,7 @@ public class HttpMessage extends Thread implements GetRequest{
             src.setConnectTimeout(5000);
             this.statusCode=src.getResponseCode();//find our status code
             type=src.getContentType();
-            if(statusCode==200&&(type.equals(XML_TXT))) {
+            if(statusCode==200&&(type.equals(XML_TXT)||type.equals(XML_APP))) {
                 Reader temp=new InputStreamReader(src.getInputStream());
                 xmlStr=new BufferedReader(temp);
                 while((line=xmlStr.readLine())!=null){
@@ -122,7 +178,7 @@ public class HttpMessage extends Thread implements GetRequest{
                 }
             }//we need OK status code and is xml
             else if(statusCode==200&&(!type.equals(XML_TXT)&&!type.equals(XML_APP))){
-                throw new Exception("Response "+statusCode+" is not XML type: '"+type+"' and '"+XML_TXT+"'");
+                throw new Exception("Response "+statusCode+" Type:'"+type+"' is NOT XML type: '"+XML_APP+"' or '"+XML_TXT+"'");
             }//status OK but NOT xml
 
         }
@@ -151,20 +207,7 @@ public class HttpMessage extends Thread implements GetRequest{
         strList.clear();
         errMsg.setLength(0);//reset string builder
 
-        start();//thread to use android network features
-        join();//wait for thread to die
-
-
-    };
-
-
-    public List <String> getList(){
-        return strList;
-    }
-
-
-    public String toString(){
-        return strList.toString();
+        sendRequest();
     }
 
 

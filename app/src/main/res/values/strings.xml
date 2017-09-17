@@ -14,5 +14,6 @@
     <string name="to_csv">Convert to CSV</string>
     <string name="password">Password</string>
     <string name="username">Username</string>
+    <string name="wait">Please Wait...</string>
 
 </resources>
